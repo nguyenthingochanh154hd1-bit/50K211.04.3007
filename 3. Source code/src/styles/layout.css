@@ -1,0 +1,58 @@
+/* Khung trang: reset, thân trang, thanh bên, thanh trên, vùng nội dung */
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{font-family:"Open Sans",system-ui,sans-serif;font-size:14px;color:#000;background:#fff;-webkit-font-smoothing:antialiased}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+svg{display:block;flex:none}
+.hide{display:none!important}
+.inter{font-family:Inter,"Open Sans",sans-serif}
+/* ---------- shell ---------- */
+#app{display:flex;min-height:100vh}
+.side{width:var(--sw);flex:none;background:#fff;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;box-shadow:4px 0 43px rgba(0,0,0,.1);z-index:6}
+.brand{height:var(--hh);flex:none;display:flex;align-items:center;gap:10px;padding:0 14px;border-bottom:1px solid #E3E6EA;box-shadow:0 2px 6px rgba(0,0,0,.05)}
+.brand img{width:57px;height:57px;object-fit:contain;flex:none}
+.brand b{display:block;font-size:clamp(19px,1.84vw,26.5px);color:#2C79FF;font-weight:700;line-height:1.1;white-space:nowrap}
+.brand span{display:block;font-size:clamp(9.5px,.99vw,14.3px);color:var(--mute2);white-space:nowrap;margin-top:3px}
+.nav{flex:1;overflow:auto;padding:33px 0 10px;display:flex;flex-direction:column;gap:11px}
+.nav>a{display:flex;align-items:center;gap:clamp(12px,1.3vw,19px);height:58px;min-height:46px;padding:0 24px;color:#000;text-decoration:none;font-size:clamp(14px,1.4vw,20.1px);cursor:pointer;flex:none}
+.nav>a svg{color:var(--pri)}
+.nav>a:hover{background:var(--e9)}
+.nav>a.on{background:var(--pri);color:#fff;font-weight:700}
+.nav>a.on svg{color:#fff}
+.nav .sub{display:flex;flex-direction:column;margin-top:-11px}
+.nav .sub a{display:flex;align-items:center;gap:10px;height:44px;padding:0 24px 0 69px;font-size:clamp(13px,1.2vw,17px);color:#000;cursor:pointer;text-decoration:none}
+.nav .sub a:before{content:"";width:6px;height:6px;border-radius:50%;background:#7C8696;margin-left:-16px;flex:none}
+.nav .sub a.on{background:var(--e9);color:var(--pri);font-weight:700}
+.nav .sub a.on:before{background:var(--pri)}
+.nav .sub a:hover{background:#F2F8FE}
+.acct{height:100px;flex:none;display:flex;align-items:center;gap:12px;padding:0 20px 0 18px;background:#F6F7F8}
+.acct .me{flex:1;display:flex;align-items:center;gap:12px;cursor:pointer;min-width:0}
+.acct .me b{display:block;font-size:clamp(14px,1.45vw,20.1px);color:#000;font-weight:400;white-space:nowrap}
+.acct .me span{display:block;font-size:clamp(12px,1.2vw,17.2px);color:var(--mute2)}
+.main{flex:1;min-width:0;display:flex;flex-direction:column;background:var(--bg)}
+.top{background:#fff;height:var(--hh);flex:none;box-shadow:0 4px 4px rgba(0,0,0,.2);padding:0 56px 0 28px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:5}
+.top .burger{display:none}
+.crumbs{display:flex;align-items:center;gap:12px;font-size:clamp(16px,1.67vw,24px);font-weight:300;color:#000;flex-wrap:wrap;line-height:1.2}
+.crumbs a{color:#000;text-decoration:none;cursor:pointer;font-weight:300}
+.crumbs a.mid{color:#000;font-weight:300}
+.crumbs a:hover{opacity:.7}
+.crumbs i{font-style:normal;font-weight:300}
+.crumbs b{color:var(--navy);font-weight:700}
+.top .back2{margin-left:auto}
+.content{padding:26px 26px 40px;flex:1;position:relative}
+.content.flush{padding:0}
+.topbar{display:flex;align-items:center;justify-content:flex-end;gap:16px;margin-bottom:22px;flex-wrap:wrap;min-height:46px}
+.topbar .sp{flex:1}
+/* sidebar cố định, không cuộn */
+.nav{overflow:hidden;padding:clamp(8px,3.2vh,33px) 0 8px;gap:clamp(2px,1.07vh,11px)}
+.nav>a{height:clamp(38px,5.66vh,58px)}
+.nav .sub{margin-top:calc(-1*clamp(2px,1.07vh,11px))}
+.nav .sub a{height:clamp(30px,4.3vh,44px)}
+.nav>a,.nav>.sub{flex:0 1 auto}
+.nav>a{min-height:32px;font-size:20px;white-space:nowrap}
+.nav>a:not(.on),.nav .sub a:not(.on){color:#526581}
+.nav .sub{min-height:0}
+.nav .sub a{flex:0 1 auto;min-height:26px}
+.topbar .search,.topbar .fbtn{height:46px!important;box-sizing:border-box}
