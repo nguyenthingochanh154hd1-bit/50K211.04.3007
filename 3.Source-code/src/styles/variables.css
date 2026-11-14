@@ -1,5 +1,0 @@
-/* Biến thiết kế (màu, kích thước) và thiết lập gốc của :root */
-:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-:root{--pri:#007AFF;--navy:#135199;--btn:#416ECD;--act:#1677FF;--danger:#EC0000;--ink:#000;--ink2:#374151;--mute:#6B7280;--mute2:#526581;--ph:#A6A6A6;--line:#E5E7EB;--line2:#D5D5D5;--bg:#D9D9D9;--strip:#FFFAFA;--thead:#F1F1F1;--e9:#E9F5FE;--ok:#16C116;--okbg:#E7FEEA;--err:#FF4D4F;--errbg:#FFEDED;--proc:#164FC1;--procbg:#EDF2FF;--le:#950086;--lebg:#FBEDFF;--si:#DE8A29;--sibg:#FFF8ED;--wait:#6016C1;--waitbg:#F6E7FE;--cx:#F8AD34;--cxbg:#FFF8EC;--sw:clamp(250px,23.9vw,344px);--hh:103px}
-/* ===== v3: theo ảnh thiết kế mới + nhận xét ===== */
-:root{--u:calc(100vw/1440)}
