@@ -50,6 +50,6 @@ export function payPick(qr,cb,pre){let sel=pre||'';openModal(`<div class="hd"><h
  ACT['pay-sel']=x=>{sel=x.dataset.id;document.querySelectorAll('.rad').forEach(r=>r.classList.toggle('on',r===x));$('#e_pay').textContent=''};
  if(sel)document.querySelectorAll('.rad').forEach(r=>r.classList.toggle('on',r.dataset.id===sel));
  $('#mSave').onclick=()=>{if(!sel){closeModal();return}cb(sel)}}
-ACT['ord-pay']=a=>{const o=G.order(a.dataset.id),c=G.cust(o.custId);if(!['Đang xử lý','Chờ thanh toán'].includes(o.status))return;if(isSi(c)&&o.debtId){go('#debts-'+o.debtId);return}
+ACT['ord-pay']=a=>{if(navigator.onLine===false)return;const o=G.order(a.dataset.id),c=G.cust(o.custId);if(!['Đang xử lý','Chờ thanh toán'].includes(o.status))return;if(isSi(c)&&o.debtId){go('#debts-'+o.debtId);return}
  if(!total(o)||o.lines.some(l=>!(+l.qty)))return;
  payPick(payQR(o),sel=>{o.status='Đã thanh toán';o.pay=sel;o.paidAt=nowISO();if(o.basket&&o.processing)occupy(o.basket,true);save();closeModal();render()},o.pm)};
