@@ -250,7 +250,7 @@ td.act{text-align:right;white-space:nowrap;width:90px}
 .stat small{font-weight:600;font-size:17px;color:#637085}
 .stat b{font-size:34px;font-weight:700;color:#0A7CFF;line-height:1.2}
 .stat .hr{border-top:1px solid #EDF1F5;margin:10px 0 6px}
-.stat a{color:#0A7CFF;font-weight:600;font-size:16.5px;cursor:pointer}
+.stat a{color:#0A7CFF;font-weight:600;font-size:16.5px;cursor:pointer;align-self:flex-end}
 .stat.o{border:1.9px solid #F59E0B}
 .rtbl{background:#fff;border:1px solid #E7EBF0;border-radius:15px;overflow:hidden;margin-bottom:12px}
 .rtbl h3{font-size:19.7px;font-weight:700;color:#243247;padding:18px 24px}
