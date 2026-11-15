@@ -18,7 +18,7 @@ function repGet(kind,f){const key=kind+'|'+JSON.stringify(f),rev=API.rev();let e
  reportsService[kind](f,rev).then(d=>{e.data=d;e.err=null}).catch(er=>{e.err=er}).finally(()=>{e.pending=false;e.rev=rev;
   if(prev!==(e.data?JSON.stringify(e.data):null)||e.err)render()});
  return e}
-const repMsg=(e,any,none)=>e.err?'Không tải được báo cáo: '+(e.err.message||'lỗi máy chủ'):(!e.data?'Đang tải báo cáo...':(!any?none[0]:none[1]));
+const repMsg=(e,any,none)=>e.err||!e.data?'':(!any?none[0]:none[1]); // không hiện thông báo lỗi / đang tải, chỉ giữ thông báo không có dữ liệu
 function revData(f){const e=repGet('revenue',f),d=e.data||{rows:[],bySvc:[],real:0,gross:0};
  const rows=d.rows.map(r=>({o:G.order(r.id),total:r.total,real:r.real,debt:r.debt,gross:r.gross})).filter(r=>r.o);
  return {rows,bySvc:d.bySvc,real:d.real,gross:d.gross,e}}
