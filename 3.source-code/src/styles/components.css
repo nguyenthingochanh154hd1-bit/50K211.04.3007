@@ -493,7 +493,7 @@ table:has(th.svh) :is(th,td):nth-child(-n+5){text-align:center!important;padding
 .dlg:not(.w795):has(.frame){min-height:0!important;height:auto!important}
 .dlg:not(.w795):has(.frame)>.ft{flex:none;align-items:center;padding-top:30px!important;padding-bottom:30px!important}
 .dlg:not(.w795):has(.frame) .frame{height:auto!important;min-height:0!important;padding-top:36px!important;padding-bottom:36px!important;justify-content:flex-start!important}
-.shopcard{width:1049px;max-width:100%;box-sizing:border-box;border-radius:4px}
+.shopcard{width:100%;max-width:100%;box-sizing:border-box;border-radius:4px}
 .shopcard .hd{background:#FFFAFA!important;height:59px;border-radius:4px 4px 0 0}
 .shopcard dt,.shopcard dd{height:62px;box-sizing:border-box;display:flex;align-items:center;padding-top:0!important;padding-bottom:0!important;border-radius:0}
 .lc:has(th.ct1) .strip{padding-left:25px}
