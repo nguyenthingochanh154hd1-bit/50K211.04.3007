@@ -5,9 +5,10 @@ import { actBtns, badge, closeModal, confirmDlg, ctBadge, done, emptyBox, fld, f
 import { $, esc, fD, fT, money, norm, pad } from '../../utils/format.js';
 import { ic } from '../../utils/icons.js';
 
+const hiddenOrd=o=>o.online&&o.status==='Đã hủy'; // đơn online đã bị xoá (xem orders.detail.js)
 export const swHTML=(on,dis,attrs='')=>`<span class="sw ${on?'on':''} ${dis?'dis':''}" data-t="Đang xử lý" ${attrs}></span>`;
 export function vCustomers(){const st=S('customers',{tab:'all'});let arr=DB.customers.slice();if(st.tab!=='all')arr=arr.filter(c=>c.type===st.tab);if(st.q){const q=norm(st.q);arr=arr.filter(c=>norm([c.id,c.name,c.phone,(G.ctype(c.type)||{}).name].join(' ')).includes(q))}
- const cnt=c=>DB.orders.filter(o=>o.custId===c.id).length;
+ const cnt=c=>DB.orders.filter(o=>o.custId===c.id&&!hiddenOrd(o)).length;
  const rows=paged('customers',arr,50).map(c=>`<tr><td class="code l" style="padding-left:28px" data-act="nav" data-h="#customers-${c.id}">${c.id}</td><td class="l"><span class="cust"><span class="avatar"><svg width="100%" height="100%" viewBox="0 0 100 100" aria-hidden="true"><path d="M12 92C16 68 31 56 50 56S84 68 88 92" fill="none" stroke="#000" stroke-width="7"/><circle cx="50" cy="38" r="15" fill="#fff" stroke="#000" stroke-width="7"/></svg></span>${esc(c.name)}</span></td><td>${esc(c.phone)}</td><td>${ctBadge(c)}</td><td style="font-family:'Segoe UI',system-ui,sans-serif">${pad(cnt(c))}</td><td class="l" style="font-family:'Segoe UI',system-ui,sans-serif;font-size:12.5px">${esc(c.addr)}</td>${actBtns('cu',c.id)}</tr>`);
  const none=st.q&&DB.customers.length?'Không tìm thấy khách hàng cần tìm!':'Hiện chưa có thông tin khách hàng nào!';
  const tabs=`<div class="tabs"><button class="${st.tab==='all'?'on':''}" data-act="tab" data-k="customers" data-v="all">Tất cả</button>${DB.custTypes.map(t=>`<button class="${st.tab===t.id?'on':''}" data-act="tab" data-k="customers" data-v="${t.id}">${esc(t.name)}</button>`).join('')}</div>`;
@@ -25,7 +26,7 @@ function custDelete(c,after){if(custBlocked(c)){toast('Không thể xóa khách 
 ACT['cu-del']=a=>custDelete(G.cust(a.dataset.id),()=>render());
 ACT['cu-del-d']=a=>custDelete(G.cust(a.dataset.id),()=>go('#customers'));
 export function vCustDetail(m){const c=G.cust(m[1]);if(!c)return {nav:'cust',sub:'customers',crumbs:[['Quản lý khách hàng','#customers'],['Không tìm thấy']],html:emptyBox('Không tìm thấy khách hàng cần tìm!')};
- const os=DB.orders.filter(o=>o.custId===c.id).sort((a,b)=>b.createdAt.localeCompare(a.createdAt));
+ const os=DB.orders.filter(o=>o.custId===c.id&&!hiddenOrd(o)).sort((a,b)=>b.createdAt.localeCompare(a.createdAt));
  const rows=os.map(o=>{const cc=G.cust(o.custId)||{};const pm=o.pay?(G.pay(o.pay)||{}).name:'';return `<tr><td class="code" data-act="nav" data-h="#orders-${o.id}">${o.id}</td><td class="dt"><div class="dtw">${fD(o.createdAt.slice(0,10))}<small>${fT(o.createdAt)}</small></div></td><td><span class="cust"><span class="avatar"><svg width="100%" height="100%" viewBox="0 0 100 100" aria-hidden="true"><path d="M12 92C16 68 31 56 50 56S84 68 88 92" fill="none" stroke="#000" stroke-width="7"/><circle cx="50" cy="38" r="15" fill="#fff" stroke="#000" stroke-width="7"/></svg></span>${esc(cc.name)}</span></td><td>${ctBadge(cc)}</td><td>${badge(o.status)}</td><td>${swHTML(o.processing&&o.status==='Đã thanh toán',true)}</td><td class="l">${esc(o.lines.map(l=>(G.svc(l.svcId)||{}).name).join(', '))}</td><td class="num">${money(sub(o))}</td><td class="num">${money(o.phuThu)}</td><td class="num">${money(o.giamGia)}</td><td class="num"><b>${money(total(o))}</b></td><td>${esc(pm)}</td></tr>`});
  const row=(i,l,v)=>`<div style="display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid #E5E7EB"><span style="color:#135199;display:inline-flex">${ic(i,22,1.6)}</span><span style="width:140px">${l}</span>${v}</div>`;
  return {nav:'cust',sub:'customers',crumbs:[['Quản lý khách hàng','#customers'],['Thông tin khách hàng','#customers'],[c.id]],html:`<h1 style="font-size:30px;font-weight:700;color:var(--navy);margin:4px 0 18px">Chi tiết thông tin khách hàng</h1>
