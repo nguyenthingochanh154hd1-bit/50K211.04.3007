@@ -39,7 +39,7 @@ ACT['ord-photo']=async a=>{try{const r=await API.get('/api/state?photos='+encode
 ACT['ord-edit']=a=>editOrder(a.dataset.id);
 ACT['ord-confirm']=a=>{pos.cur=null;go('#orders-'+a.dataset.id+'-edit')};
 /* Xoá đơn online đang chờ xác nhận: giữ bản ghi với trạng thái "Đã hủy" để web đặt online vẫn tra cứu được, chỉ ẩn khỏi danh sách quản lý (xem hiddenOrd) */
-export const hiddenOrd=o=>o.online&&o.status==='Đã hủy';
+export const hiddenOrd=o=>o.status==='Đã hủy';
 ACT['ord-reject']=a=>confirmDlg('Bạn có chắc chắn muốn xoá không?',()=>{if(offline('Xoá thất bại!'))return;const o=G.order(a.dataset.id);if(o.basket)occupy(o.basket,false);o.status='Đã hủy';save();toast('Đã xoá thành công!');go('#orders')},{yes:'Xác nhận',no:'Huỷ'});
 export function delOrder(id,toList){const o=G.order(id),c=G.cust(o.custId);const bad=o.status==='Chờ thanh toán'||(o.status==='Đã thanh toán'&&!o.processing)||(isSi(c)&&o.status==='Đã giao');
  if(bad){toast('Không thể xóa vì trạng thái đơn không hợp lệ!','e');return}
