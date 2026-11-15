@@ -37,7 +37,7 @@ ACT['ord-photo']=async a=>{try{const r=await API.get('/api/state?photos='+encode
  openModal(`<div class="hd"><h3>Hình ảnh giỏ đựng</h3></div><div class="bd2" style="padding:0 18px 6px"><img src="${esc(u)}" alt="Hình ảnh giỏ đựng" style="display:block;max-width:100%;max-height:68vh;margin:0 auto;border-radius:8px"></div><div class="ft ctr"><button class="btn pri" data-act="close">Đóng</button></div>`,'cf')}
  catch(e){}};
 ACT['ord-edit']=a=>editOrder(a.dataset.id);
-ACT['ord-confirm']=a=>{pos.cur=null;go('#orders-'+a.dataset.id+'-edit')};
+ACT['ord-confirm']=a=>{if(navigator.onLine===false)return;pos.cur=null;go('#orders-'+a.dataset.id+'-edit')};
 /* Xoá đơn online đang chờ xác nhận: giữ bản ghi với trạng thái "Đã hủy" để web đặt online vẫn tra cứu được, chỉ ẩn khỏi danh sách quản lý (xem hiddenOrd) */
 export const hiddenOrd=o=>o.status==='Đã hủy';
 ACT['ord-reject']=a=>confirmDlg('Bạn có chắc chắn muốn xoá không?',()=>{if(offline('Xoá thất bại!'))return;const o=G.order(a.dataset.id);if(o.basket)occupy(o.basket,false);o.status='Đã hủy';save();toast('Đã xoá thành công!');go('#orders')},{yes:'Xác nhận',no:'Huỷ'});
