@@ -33,12 +33,14 @@ ACT['tg-proc-d']=a=>{if(offline('Cập nhật thất bại!'))return;const o=G.o
 export function editOrder(id){const o=G.order(id);if(!['Chờ xác nhận','Đang xử lý','Chờ thanh toán'].includes(o.status)){toast('Không thể cập nhật vì trạng thái đơn hàng không hợp lệ!','e');return}pos.cur=null;go('#orders-'+id+'-edit')}
 /* Xem ảnh giỏ của đơn online: máy chủ cấp đường dẫn tạm có chữ ký (hết hạn sau 10 phút) từ Supabase Storage */
 ACT['ord-photo']=async a=>{try{const r=await API.get('/api/state?photos='+encodeURIComponent(a.dataset.id));const u=(r.urls||[])[+a.dataset.i];
- if(!u){toast('Không tải được ảnh!','e','Ảnh không còn trên máy chủ.');return}
+ if(!u)return;
  openModal(`<div class="hd"><h3>Hình ảnh giỏ đựng</h3></div><div class="bd2" style="padding:0 18px 6px"><img src="${esc(u)}" alt="Hình ảnh giỏ đựng" style="display:block;max-width:100%;max-height:68vh;margin:0 auto;border-radius:8px"></div><div class="ft ctr"><button class="btn pri" data-act="close">Đóng</button></div>`,'cf')}
- catch(e){toast('Không tải được ảnh!','e',e.network?'Lỗi đường truyền!':'')}};
+ catch(e){}};
 ACT['ord-edit']=a=>editOrder(a.dataset.id);
 ACT['ord-confirm']=a=>{pos.cur=null;go('#orders-'+a.dataset.id+'-edit')};
-ACT['ord-reject']=a=>confirmDlg('Bạn có chắc chắn muốn hủy đơn này không?',()=>{if(offline('Hủy đơn thất bại!'))return;const o=G.order(a.dataset.id);if(o.basket)occupy(o.basket,false);o.status='Đã hủy';save();toast('Đã hủy đơn hàng!');render()},{yes:'Hủy đơn',no:'Không',red:true});
+/* Xoá đơn online đang chờ xác nhận: giữ bản ghi với trạng thái "Đã hủy" để web đặt online vẫn tra cứu được, chỉ ẩn khỏi danh sách quản lý (xem hiddenOrd) */
+export const hiddenOrd=o=>o.online&&o.status==='Đã hủy';
+ACT['ord-reject']=a=>confirmDlg('Bạn có chắc chắn muốn xoá không?',()=>{if(offline('Xoá thất bại!'))return;const o=G.order(a.dataset.id);if(o.basket)occupy(o.basket,false);o.status='Đã hủy';save();toast('Đã xoá thành công!');go('#orders')},{yes:'Xác nhận',no:'Huỷ'});
 export function delOrder(id,toList){const o=G.order(id),c=G.cust(o.custId);const bad=o.status==='Chờ thanh toán'||(o.status==='Đã thanh toán'&&!o.processing)||(isSi(c)&&o.status==='Đã giao');
  if(bad){toast('Không thể xóa vì trạng thái đơn không hợp lệ!','e');return}
  confirmDlg('Bạn có chắc chắn muốn xóa không?',()=>{if(offline('Xóa thất bại!'))return;if(o.basket&&['Đang xử lý','Chờ xác nhận'].includes(o.status))occupy(o.basket,false);if(o.debtId){const d=G.debt(o.debtId);if(d){d.orderIds=d.orderIds.filter(x=>x!==o.id);if(!d.orderIds.length)DB.debts=DB.debts.filter(x=>x.id!==d.id)}}DB.orders=DB.orders.filter(x=>x.id!==o.id);save();toast('Đã xóa thành công!');if(toList)go('#orders');else render()})}
@@ -48,6 +50,6 @@ export function payPick(qr,cb,pre){let sel=pre||'';openModal(`<div class="hd"><h
  ACT['pay-sel']=x=>{sel=x.dataset.id;document.querySelectorAll('.rad').forEach(r=>r.classList.toggle('on',r===x));$('#e_pay').textContent=''};
  if(sel)document.querySelectorAll('.rad').forEach(r=>r.classList.toggle('on',r.dataset.id===sel));
  $('#mSave').onclick=()=>{if(!sel){closeModal();return}cb(sel)}}
-ACT['ord-pay']=a=>{const o=G.order(a.dataset.id),c=G.cust(o.custId);if(!['Đang xử lý','Chờ thanh toán'].includes(o.status))return;if(isSi(c)&&o.debtId){toast('Đơn của khách sỉ được thanh toán theo công nợ.','n');go('#debts-'+o.debtId);return}
+ACT['ord-pay']=a=>{const o=G.order(a.dataset.id),c=G.cust(o.custId);if(!['Đang xử lý','Chờ thanh toán'].includes(o.status))return;if(isSi(c)&&o.debtId){go('#debts-'+o.debtId);return}
  if(!total(o)||o.lines.some(l=>!(+l.qty)))return;
- payPick(payQR(o),sel=>{if(offline('Thanh toán thất bại!'))return;o.status='Đã thanh toán';o.pay=sel;o.paidAt=nowISO();if(o.basket&&o.processing)occupy(o.basket,true);save();closeModal();render()},o.pm)};
+ payPick(payQR(o),sel=>{o.status='Đã thanh toán';o.pay=sel;o.paidAt=nowISO();if(o.basket&&o.processing)occupy(o.basket,true);save();closeModal();render()},o.pm)};
