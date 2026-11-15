@@ -5,7 +5,7 @@ import { actBtns, badge, closeModal, confirmDlg, ctBadge, done, emptyBox, fld, f
 import { $, esc, fD, fT, money, norm, pad } from '../../utils/format.js';
 import { ic } from '../../utils/icons.js';
 
-const hiddenOrd=o=>o.online&&o.status==='Đã hủy'; // đơn online đã bị xoá (xem orders.detail.js)
+const hiddenOrd=o=>o.status==='Đã hủy'; // đơn đã huỷ/xoá không hiện trong danh sách (xem orders.detail.js)
 export const swHTML=(on,dis,attrs='')=>`<span class="sw ${on?'on':''} ${dis?'dis':''}" data-t="Đang xử lý" ${attrs}></span>`;
 export function vCustomers(){const st=S('customers',{tab:'all'});let arr=DB.customers.slice();if(st.tab!=='all')arr=arr.filter(c=>c.type===st.tab);if(st.q){const q=norm(st.q);arr=arr.filter(c=>norm([c.id,c.name,c.phone,(G.ctype(c.type)||{}).name].join(' ')).includes(q))}
  const cnt=c=>DB.orders.filter(o=>o.custId===c.id&&!hiddenOrd(o)).length;
